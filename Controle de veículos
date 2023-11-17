@@ -1,0 +1,344 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <ctype.h>
+
+#define TAM_LISTA 10
+#define TAM_PLACA 8
+
+typedef struct{
+  char proprietario [30];
+  char combustivel [30]; //álcool, diesel ou gasolina
+  char modelo [30];
+  char cor[10];
+  int chassi;
+  int ano;
+  char placa[TAM_PLACA]; //três primeiras letras e quatro números
+}Carro;
+
+typedef struct {
+  Carro carros[TAM_LISTA];
+  int totalCarros;
+} Estoque;
+char pesquisa[TAM_PLACA];
+
+void start(Estoque *estoque) {
+  estoque -> totalCarros = 0;
+}
+
+void cadastro(Estoque *estoque){
+  if(estoque -> totalCarros < TAM_LISTA){
+    Carro novoCarro;
+    printf("\n\n===============================\n\n");
+    printf("Início de cadastro:");
+    printf("\n\nDigite o nome do proprietário: ");
+    scanf("%s", novoCarro.proprietario);
+    printf("\n\nDigite o modelo do carro: ");
+    scanf("%s", novoCarro.modelo);
+    printf("\n\nDigite a cor do carro: ");
+    scanf("%s", novoCarro.cor);
+    printf("\n\nDigite o ano do carro: ");
+    scanf("%d", &novoCarro.ano);
+    printf("\n\nDigite o tipo de combustível do carro: \n- Álcool\n- Diesel\n- Gasolina\n");
+    scanf("%s", novoCarro.combustivel);
+    printf("\n\nDigite o número do chassi do carro: ");
+    scanf("%d", &novoCarro.chassi);
+    printf("\n\nDigite a placa do carro (padrão: ABC1234): ");
+    scanf("%s", novoCarro.placa);
+
+    estoque -> carros[estoque -> totalCarros] = novoCarro;
+    estoque -> totalCarros++;
+
+    printf("\n\nCadastro efetuado com sucesso!\n\n");
+    printf("\n\n===============================\n\n");
+  }else{
+    printf("\n\nEstoque cheio, tente novamente mais tarde.\n\n");
+    printf("\n\n===============================\n\n");
+    return;
+  }
+}
+
+void imprimirLista(Estoque estoque){
+  if(estoque.totalCarros == 0){
+    printf("\n\nLista vazia, adicione carros no sistema para vê-los aqui.\n\n");
+    return;
+  } else {
+    printf("\n\n===============================\n\n");
+    printf("\n\nLista de carros cadastrados: \n");
+    for(int i = 0; i < estoque.totalCarros; i++){
+      printf("\n\nProprietário: %s", estoque.carros[i].proprietario);
+      printf("\n\nModelo: %s", estoque.carros[i].modelo);
+      printf("\n\nCor: %s", estoque.carros[i].cor);
+      printf("\n\nCombustível: %s", estoque.carros[i].combustivel);
+      printf("\n\nNúmero do chassi: %d", estoque.carros[i].chassi);
+      printf("\n\nNúmero da placa: %s", estoque.carros[i].placa);
+      printf("\n\nAno do veículo: %d\n\n", estoque.carros[i].ano);
+      printf("\n\n===============================\n\n");
+    }
+  }
+}
+
+void buscar(Estoque estoque){
+  char pesquisa;
+  if(estoque.totalCarros == 0){
+    printf("\n\nLista vaiza, adicione carros no sistema para vê-los aqui.\n\n");
+} else {
+    printf("\n\n===============================\n\n");
+    printf("\n\nDigite o número da placa: ");
+    scanf("%s", &pesquisa);
+    for(int i = 0; i < estoque.totalCarros; i++){
+      printf("\n\nProduto encontrado:");
+      printf("\n\nModelo: %s", estoque.carros[i].modelo);
+      printf("\n\nProprietário: %s", estoque.carros[i].proprietario);
+      printf("\n\nTipo do combustível: %s", estoque.carros[i].combustivel);
+      printf("\n\nCor: %s", estoque.carros[i].cor);
+      printf("\n\nNúmero do chassi: %d", estoque.carros[i].chassi);
+      printf("\n\nAno do veículo: %d", estoque.carros[i].ano);
+      printf("\n\n===============================\n\n");
+      return;
+    }
+  }
+}
+
+void excluir (Estoque *estoque){
+
+  if(estoque -> totalCarros == 0){
+    printf("\n\nLista vaiza, adicione carros no sistema para vê-los aqui.\n\n");
+  } else {
+  char excluir;
+    printf("\n\n===============================\n\n");
+  printf("\n\nDigite o número da placa para remover: ");
+  scanf("%s", &excluir);
+  
+  for(int i = 0; i < estoque->totalCarros; i++){
+    if(strcmp(estoque->carros[i].placa, &excluir) == 0){
+      for(int j = 0; j < estoque->totalCarros - 1; j++){
+        estoque->carros[j] = estoque->carros[j + 1];
+      }
+
+      estoque->totalCarros--;
+
+      printf("\n\nVeículo removido com sucesso!");
+      printf("\n\n===============================\n\n");
+      return;
+    }
+  }
+  printf("\n\nVeículo não encontrado ou não existe.");
+  printf("\n\n===============================\n\n");
+  return;
+  }
+}
+
+void chamar(Estoque estoque){
+  if(estoque.totalCarros == 0){
+    printf("\n\nLista vazia, adicione carros no sistema para vê-los aqui.\n\n");
+    return;
+  } else {
+    printf("\n\n===============================\n\n");
+    printf("\n\nLista de carros:\n\n");
+    for(int i = 0; i < estoque.totalCarros; i++){
+      if(estoque.carros[i].ano >= 2010 && strcmp(estoque.carros[i].combustivel, "Diesel") == 0){
+        printf("\n\nModelo: %s", estoque.carros[i].modelo);
+        printf("\n\nProprietário: %s", estoque.carros[i].proprietario);
+        printf("\n\nTipo do combustível: %s", estoque.carros[i].combustivel);
+        printf("\n\nAno do veículo: %d", estoque.carros[i].ano);
+        printf("\n\nPlaca do veículo: %s", estoque.carros[i].placa);
+        printf("\n\n===============================\n\n");
+        return;
+      }
+    }
+  }
+}
+
+void placa(Estoque estoque){
+  if(estoque.totalCarros == 0){
+    printf("\n\nLista vazia, adicione carros no sistema para vê-los aqui.\n\n");
+  } else {
+    for(int i = 0; i < estoque.totalCarros; i++){
+      if(estoque.carros[i].placa[0] == 'J' || 
+      estoque.carros[i].placa[6] == '0' ||
+      estoque.carros[i].placa[6] == '2' ||
+      estoque.carros[i].placa[6] == '4' ||
+      estoque.carros[i].placa[6] == '7'){
+        printf("\n\n===============================\n\n");
+        printf("\n\nModelo: %s", estoque.carros[i].modelo);
+        printf("\n\nProprietário: %s", estoque.carros[i].proprietario);
+        printf("\n\nPlaca do veículo: %s", estoque.carros[i].placa);
+        printf("\n\n===============================\n\n");
+        return;
+      }
+      
+    }
+    
+  }
+  
+}
+
+void cores(Estoque estoque){
+  if(estoque.totalCarros == 0){
+    printf("\n\nLista vazia, adicione carros no sistema para vê-los aqui.\n\n");
+    return;
+  } else {
+    for(int i = 0; i < estoque.totalCarros; i++){
+      if(estoque.carros[i].placa[1] == 'A' ||
+         estoque.carros[i].placa[1] == 'E' ||
+         estoque.carros[i].placa[1] == 'I' ||
+         estoque.carros[i].placa[1] == 'O' ||
+         estoque.carros[i].placa[1] == 'U'){
+
+          //letras
+          if (strlen(estoque.carros[i].placa) == 7 && isalpha(estoque.carros[i].placa[0]) && isalpha(estoque.carros[i].placa[1]) && isalpha(estoque.carros[i].placa[2])) {
+              int numeros[4];
+              //números
+              sscanf(estoque.carros[i].placa + 3, "%1d%1d%1d%1d", &numeros[0], &numeros[1], &numeros[2], &numeros[3]);
+
+              int soma = numeros[0] + numeros[1] + numeros[2] + numeros[3];
+
+              if (soma % 2 == 0) {
+                  printf("A soma dos números da placa é par.\n");
+              } else {
+                  printf("A soma dos números da placa não é par.\n");
+              }
+
+        
+        printf("\n\n===============================\n\n");
+        printf("\n\nProprietário: %s", estoque.carros[i].proprietario);
+        printf("\n\nModelo: %s", estoque.carros[i].modelo);
+        printf("\n\nCor do veículo: %s", estoque.carros[i].cor);
+        printf("\n\nPlaca do veículo: %s", estoque.carros[i].placa);
+        printf("\n\n%d, a placa tem a soma par.", soma);
+        printf("\n\n===============================\n\n");
+       }
+      }
+    }
+  }
+}
+
+void troca(Estoque *estoque) {
+    int opcao;
+    int buscaChassi;
+
+    printf("\nDigite o número do chassi do veículo que deseja alterar: ");
+    scanf("%d", &buscaChassi);
+
+    for (int i = 0; i < estoque->totalCarros; i++) {
+      if(estoque->carros[i].placa[3] != '0' ||
+         estoque->carros[i].placa[4] != '0' ||
+         estoque->carros[i].placa[5] != '0' ||
+         estoque->carros[i].placa[6] != '0'){
+        if (estoque->carros[i].chassi == buscaChassi) {
+
+            printf("\n\nMenu de alteração:");
+            printf("\n\n===============================\n\n");
+            printf("\n\nProprietário: %s", estoque->carros[i].proprietario);
+            printf("\n\nModelo: %s", estoque->carros[i].modelo);
+            printf("\n\nPlaca do veículo: %s", estoque->carros[i].placa);
+
+            printf("\n\nDigite 1 para trocar o nome do proprietário.");
+            printf("\n\nDigite 2 para trocar a cor do veículo.");
+            printf("\n\nDigite 3 para trocar a placa do veículo.");
+            printf("\n\nDigite 4 para trocar todos.");
+            printf("\n\nDigite 0 para sair do sistema.");
+            scanf("%d", &opcao);
+
+            switch (opcao) {
+                case 1:
+                    printf("\n\nQual o nome do novo proprietário? ");
+                    scanf(" %[^\n]", estoque->carros[i].proprietario);
+                    break;
+                case 2:
+                    printf("\n\nQual a nova cor do veículo? ");
+                    scanf("%s", estoque->carros[i].cor);
+                    break;
+                case 3:
+                    printf("\n\nQual a nova placa do veículo? ");
+                    scanf("%s", estoque->carros[i].placa);
+                    break;
+                case 4:
+                    printf("\n\nQual o nome do novo proprietário? ");
+                    scanf(" %[^\n]", estoque->carros[i].proprietario);
+
+                    printf("\n\nQual a nova cor do veículo? ");
+                    scanf("%s", estoque->carros[i].cor);
+
+                    printf("\n\nQual a nova placa do veículo? ");
+                    scanf("%s", estoque->carros[i].placa);
+
+                    printf("\n\nAlterações salvas!");
+                    printf("\n\n===============================\n\n");
+                    break;
+                case 0:
+                    printf("Saindo do sistema.");
+                    printf("\n\n===============================\n\n");
+                    break;
+            }
+            break;
+        }
+      }else {
+        printf("\n\nCondições não atendidas.\n\n");
+        return;
+      }
+        
+    }
+}
+
+
+
+
+int main() {
+
+  Estoque estoque;
+  start(&estoque);
+
+  int opcao;
+
+  do{
+    printf("Digite 1 para cadastrar.");
+    printf("\n\nDigite 2 para imprimir a lista.");
+    printf("\n\nDigite 3 para buscar.");
+    printf("\n\nDigite 4 para excluir.");
+    printf("\n\nDigite 5 para puxar a lista condicional.");
+    printf("\n\nDigite 6 para puxar a lista de placas condicionais.");
+    printf("\n\nDigite 7 para puxar a lista de cores condicionais.");
+    printf("\n\nDigite 8 para entrar no menu de alteração.");
+    printf("\n\nDigite 0 para sair do sistema.");
+    scanf(" %d", &opcao);
+    printf("\n\n===============================\n\n");
+
+    switch(opcao){
+      case 1:
+        cadastro(&estoque);
+        break;
+      case 2:
+        imprimirLista(estoque);
+        break;
+      case 3:
+        buscar(estoque);
+        break;
+      case 4:
+        excluir(&estoque);
+        break;
+      case 5:
+        chamar(estoque);
+        break;
+      case 6:
+        placa(estoque);
+        break;
+      case 7:
+        cores(estoque);
+        break;
+      case 8:
+        troca(&estoque);
+        break;
+      case 0:
+        printf("\n\nSaindo do sistema.");
+        printf("\n\n===============================\n\n");
+        break;
+    }
+    
+  } while (opcao != 0);
+
+  return 0;
+
+} //Isso demorou MUITO pra terminar, me sinto orgulhoso desse código, mesmo sendo básico
